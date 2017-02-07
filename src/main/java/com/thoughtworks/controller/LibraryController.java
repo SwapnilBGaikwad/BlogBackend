@@ -1,22 +1,31 @@
 package com.thoughtworks.controller;
 
 import com.thoughtworks.model.Book.Book;
-import com.thoughtworks.model.Library;
+import com.thoughtworks.repository.BookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-
 @RestController
+@RequestMapping( value = "/" )
 public class LibraryController {
 
-    @RequestMapping( value = "/", method = RequestMethod.GET )
-    public @ResponseBody Book getBooks( @ModelAttribute Book book ) {
-        Book book1 = new Book( 1, "Book 1" );
-        Book book2 = new Book( 2, "Book 2" );
-        List<Book> books = Arrays.asList( book1, book2 );
-        Library library = new Library( books );
+    private BookRepository bookRepository;
 
-        return library.getBook( book.getId() );
+    @Autowired
+    public LibraryController(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
+
+    @RequestMapping( method = RequestMethod.GET )
+    public @ResponseBody Book getBooks( @ModelAttribute Book book ) {
+        return bookRepository.findOne( book.getId() );
+    }
+
+    @RequestMapping( method = RequestMethod.POST )
+    public @ResponseBody boolean saveBook( @ModelAttribute Book book ) {
+        Book savedBook = bookRepository.save( book );
+        System.out.println( savedBook );
+        return savedBook != null;
+    }
+
 }

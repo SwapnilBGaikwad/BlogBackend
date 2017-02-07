@@ -1,13 +1,16 @@
 package com.thoughtworks.model.Book;
 
-import org.springframework.stereotype.Component;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Component
+@Document
 public class Book {
-    private int id;
+
+    @Id
+    private String id;
     private String title;
 
-    public Book( int id, String title ) {
+    public Book( String id, String title ) {
         this.id = id;
         this.title = title;
     }
@@ -15,11 +18,11 @@ public class Book {
     public Book() {
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId( int id ) {
+    public void setId( String id ) {
         this.id = id;
     }
 
@@ -29,5 +32,12 @@ public class Book {
 
     public void setTitle( String title ) {
         this.title = title;
+    }
+
+    @Override public String toString() {
+        return "Book{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                '}';
     }
 }
